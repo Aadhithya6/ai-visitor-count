@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Visitor Monitoring System | Real-Time Dashboard</title>
+    <!-- Google Fonts: Inter -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #6366f1;
+            --bg-dark: #0f172a;
+            --card-bg: rgba(30, 41, 59, 0.7);
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+            --glass-border: rgba(255, 255, 255, 0.1);
+            --accent: #10b981;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', sans-serif;
+        }
+
+        body {
+            background: var(--bg-dark);
+            color: var(--text-main);
+            min-height: 100vh;
+            overflow-x: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Animated Background Mesh */
+        body::before {
+            content: "";
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+                radial-gradient(circle at 15% 15%, rgba(99, 102, 241, 0.15) 0%, transparent 40%),
+                radial-gradient(circle at 85% 85%, rgba(16, 185, 129, 0.1) 0%, transparent 40%);
+            z-index: -1;
+        }
+
+        header {
+            padding: 2rem 5%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid var(--glass-border);
+            backdrop-filter: blur(10px);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .logo-section h1 {
+            font-size: 1.5rem;
+            font-weight: 700;
+            letter-spacing: -0.025em;
+            background: linear-gradient(to right, #6366f1, #10b981);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .status-badge {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: rgba(16, 185, 129, 0.15);
+            padding: 0.5rem 1rem;
+            border-radius: 99px;
+            color: var(--accent);
+            font-size: 0.875rem;
+            font-weight: 600;
+            border: 1px solid rgba(16, 185, 129, 0.3);
+        }
+
+        .status-dot {
+            width: 8px;
+            height: 8px;
+            background: var(--accent);
+            border-radius: 50%;
+            box-shadow: 0 0 10px var(--accent);
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.7); }
+            70% { transform: scale(1); box-shadow: 0 0 0 10px rgba(16, 185, 129, 0); }
+            100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(16, 185, 129, 0); }
+        }
+
+        main {
+            padding: 2rem 5%;
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 2rem;
+            flex-grow: 1;
+        }
+
+        .dashboard-card {
+            background: var(--card-bg);
+            border: 1px solid var(--glass-border);
+            border-radius: 20px;
+            padding: 1.5rem;
+            position: relative;
+            overflow: hidden;
+            backdrop-filter: blur(12px);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+        }
+
+        .video-container {
+            width: 100%;
+            height: 600px;
+            background: #000;
+            border-radius: 12px;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 1px solid var(--glass-border);
+        }
+
+        .video-container img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+        }
+
+        .stats-section {
+            display: flex;
+            flex-direction: column;
+            gap: 2rem;
+        }
+
+        .stat-card {
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 16px;
+            padding: 1.5rem;
+            border: 1px solid var(--glass-border);
+            transition: transform 0.3s ease;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .stat-label {
+            color: var(--text-muted);
+            font-size: 0.875rem;
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .stat-value {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-top: 0.5rem;
+            color: #fff;
+        }
+
+        .logs-container {
+            margin-top: 1rem;
+            height: 400px;
+            overflow-y: auto;
+            scrollbar-width: thin;
+            scrollbar-color: var(--primary) transparent;
+        }
+
+        .logs-container::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .logs-container::-webkit-scrollbar-thumb {
+            background: var(--primary);
+            border-radius: 10px;
+        }
+
+        .log-entry {
+            padding: 0.8rem 1rem;
+            margin-bottom: 0.5rem;
+            border-radius: 10px;
+            background: rgba(255, 255, 255, 0.02);
+            font-size: 0.85rem;
+            border-left: 3px solid var(--primary);
+            animation: slideIn 0.3s ease-out;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .log-entry.entered { border-left-color: var(--accent); }
+        .log-entry.exited { border-left-color: #ef4444; }
+
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateX(20px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+
+        .timestamp { color: var(--text-muted); font-size: 0.75rem; }
+
+        footer {
+            padding: 1.5rem 5%;
+            text-align: center;
+            color: var(--text-muted);
+            font-size: 0.75rem;
+            border-top: 1px solid var(--glass-border);
+        }
+
+        /* Responsive */
+        @media (max-width: 1024px) {
+            main { grid-template-columns: 1fr; }
+            .video-container { height: 400px; }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="logo-section">
+            <h1>Visitor Monitoring System</h1>
+        </div>
+        <div class="status-badge">
+            <div class="status-dot"></div>
+            System Status: Running
+        </div>
+    </header>
+
+    <main>
+        <section class="dashboard-card main-feed">
+            <h2 style="margin-bottom: 1.5rem; font-size: 1.1rem; color: var(--text-muted);">LIVE PROCESSING FEED</h2>
+            <div class="video-container">
+                <img id="videoStream" src="http://localhost:8000/video" alt="Live Processing Stream">
+            </div>
+        </section>
+
+        <aside class="stats-section">
+            <div class="dashboard-card">
+                <div class="stat-label">Total Unique Visitors</div>
+                <div class="stat-value" id="visitorCount">0</div>
+            </div>
+
+            <div class="dashboard-card">
+                <h2 style="font-size: 1rem; color: var(--text-muted); margin-bottom: 1rem;">RECENT EVENTS</h2>
+                <div class="logs-container" id="eventLogs">
+                    <!-- Logs will be populated here -->
+                </div>
+            </div>
+        </aside>
+    </main>
+
+    <footer>
+        &copy; 2024 Intelligent Face Tracker | Production Dashboard v1.0
+    </footer>
+
+    <script>
+        const API_BASE = "http://localhost:8000";
+
+        async function updateVisitorCount() {
+            try {
+                const response = await fetch(`${API_BASE}/visitors/count`);
+                const data = await response.json();
+                document.getElementById('visitorCount').textContent = data.count;
+            } catch (err) {
+                console.error("Failed to fetch visitor count", err);
+            }
+        }
+
+        async function updateEvents() {
+            try {
+                const response = await fetch(`${API_BASE}/events`);
+                const data = await response.json();
+                const container = document.getElementById('eventLogs');
+                
+                container.innerHTML = '';
+                
+                data.logs.forEach(log => {
+                    const div = document.createElement('div');
+                    div.className = 'log-entry';
+                    if (log.includes("ENTERED")) div.classList.add('entered');
+                    if (log.includes("EXITED")) div.classList.add('exited');
+                    div.textContent = log;
+                    container.appendChild(div);
+                });
+            } catch (err) {
+                console.error("Failed to fetch logs", err);
+            }
+        }
+
+        setInterval(updateVisitorCount, 1000);
+        setInterval(updateEvents, 2000);
+        updateVisitorCount();
+        updateEvents();
+    </script>
+</body>
+</html>

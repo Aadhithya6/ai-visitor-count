@@ -1,0 +1,12 @@
+{
+    "video_source": "walking_video.mp4",
+    "detection_skip_frames": 3,
+    "similarity_threshold": 0.4,
+    "exit_frame_threshold": 50,
+    "min_frames_for_registration": 3,
+    "blur_threshold": 100.0,
+    "db_url": "postgresql://postgres:A%40dhi2006@localhost:5432/facedb",
+    "log_dir": "logs",
+    "yolo_model": "yolov8n.pt",
+    "insightface_model": "buffalo_l"
+}

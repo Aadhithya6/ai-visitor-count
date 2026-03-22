@@ -1,0 +1,12 @@
+ultralytics
+insightface
+deep-sort-realtime
+sqlalchemy
+opencv-python
+numpy
+onnxruntime
+scikit-learn
+fastapi
+uvicorn
+python-multipart
+psycopg2-binary
