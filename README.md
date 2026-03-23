@@ -60,6 +60,20 @@ graph TD
 | **FastAPI Backend** | < 5% | N/A | ~150 MB |
 | **Total (Overall)** | **40-60% (i7 10th Gen)** | **30-45% (RTX 3060)** | **~4.5 GB** |
 
+### 📹 Live IP Camera Setup (RTSP)
+The system is optimized for high-performance RTSP streams. To connect an IP camera:
+
+1.  **Configure RTSP URL**: Update your `config.json` with your camera's RTSP string:
+    ```json
+    {
+        "video_source": "rtsp://username:password@192.168.1.100:554/stream"
+    }
+    ```
+2.  **Optimizations**: The system automatically detects live streams and applies:
+    - **RTSP Over UDP**: To reduce latency and prevent blocky artifacts.
+    - **OpenCV Buffer Size (1)**: Ensures you are always processing the most recent frame.
+    - **Detection Skip Frames**: Recommended value of `2` or `3` for high-resolution 4K streams.
+
 ---
 
 ## ⚙️ Setup Instructions
