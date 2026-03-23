@@ -1,6 +1,6 @@
-# Intelligent Face Tracker with Real-Time Dashboard
+# Sentinel Vision: Enterprise Face Monitoring
 
-A production-grade, full-stack video analytics solution for tracking unique visitors, logging entry/exit events, and visualizing live data through a premium web dashboard.
+A professional, industrial-grade video analytics solution featuring an **Enterprise-Level Dashboard** for real-time tracking of unique visitors, facility security events, and live surveillance demographics.
 
 ## 🏆 Hackathon Submission
 **This project is a part of a hackathon run by [Katomaran](https://katomaran.com)**
@@ -10,14 +10,18 @@ A production-grade, full-stack video analytics solution for tracking unique visi
 ## 🏢 Architecture & AI Planning
 
 ### 1. Planning the App
-The goal was to create a system that can reliably identify unique individuals in a video stream without re-counting them if they leave and return. The strategy involves:
-- **Fast Detection**: Using YOLOv8 to locate people/faces in every few frames.
-- **Robust Tracking**: Using DeepSORT to maintain identity across frames even if the person turns away briefly.
-- **High-Precision Recognition**: Using InsightFace (ArcFace) to generate 512-dimensional embeddings for every new face.
-- **Persistent Memory**: Storing embeddings in PostgreSQL to match returning visitors using Cosine Similarity.
-- **Real-Time Visibility**: A FastAPI backend to stream the processed video and a modern CSS/JS dashboard for analytics.
+Our objective was to develop a systems architecture capable of high-fidelity biometric re-identification in real-time. The planning focused on:
+- **Biometric Consistency**: Using ArcFace (InsightFace) to ensure individuals aren't double-counted across multiple sessions.
+- **Enterprise UI Design**: Shifting from simple visualizations to a professional sidebar-based dashboard for facility managers.
+- **Data Integrity**: Implementing a PostgreSQL-backed audit trail for all entry/exit events.
+- **Asynchronous Execution**: Decoupling the heavyweight AI inference loop from the sub-second web API responses.
 
-### 2. Architecture Diagram
+### 2. Architecture Diagram & Assets
+We have provided structured sample data in the `sample_output/` folder:
+- **`sample_output/images/`**: High-resolution face captures from live tracking.
+- **`sample_output/logs/`**: Historical audit logs in plain text.
+- **`sample_output/db_dump/`**: SQL relational schema for visitors and events.
+
 ```mermaid
 graph TD
     A[Video Source] -->|OpenCV| B[Frame Pre-processing]
@@ -31,7 +35,7 @@ graph TD
     I -->|Log Event| J[Database & File Logs]
     H -->|Log Re-entry| J
     B -->|Stream| K[FastAPI Backend]
-    K -->|Multipart Stream| L[Web Dashboard]
+    K -->|Multipart Stream| L[Professional Web Dashboard]
     J -->|JSON API| L
 ```
 
@@ -39,11 +43,10 @@ graph TD
 
 ## 🚀 Key Features
 
-- **Live Processing Dashboard**: Premium UI with Glassmorphism design showing the live camera feed with AI overlays.
-- **Unique Visitor Counter**: Intelligent counting that distinguishes between new and returning visitors.
-- **Real-Time Event Logs**: Persistent record of every person entering and exiting the frame.
-- **Multi-Threaded Performance**: Backend runs the heavy AI pipeline in a background thread while the API serves data instantly.
-- **Auto-Registration**: System automatically scales as new people are detected, saving high-quality face crops for future recognition.
+- **Enterprise Analytics Dashboard**: A clean, industrial-grade side-navigation UI for real-time facility monitoring.
+- **Persistent Biometric Memory**: Securely stores and matches facial embeddings across system reboots.
+- **Automated Security Audit**: Every visitor event is logged with a timestamp and high-definition face crop for evidence.
+- **Optimized Compute Pipeline**: Engineered for NVIDIA GPU acceleration to maintain high FPS during peak traffic.
 
 ---
 
