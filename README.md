@@ -133,7 +133,7 @@ High-quality face crops are stored in `logs/entry/` and `logs/exit/` for manual 
 ---
 
 ## 🎥 Project Demonstration
-**Watch the video explanation here:** [Loom / YouTube Link Placeholder]
+**Watch the video explanation here:** [https://www.loom.com/share/fd956881c303465a9ad6a3efeafd5d90]
 
 ---
 This project is a part of a hackathon run by https://katomaran.com
